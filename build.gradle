@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'dev.techh'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -16,6 +16,15 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    implementation 'org.javassist:javassist:3.28.0-GA'
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+}
+
+jar {
+    manifest {
+        attributes 'Premain-Class': 'dev.techh.PerfUnit'
+        attributes 'Can-Retransform-Classes': true
+    }
 }
 
 test {
