@@ -1,6 +1,5 @@
 package dev.techh.transformer;
 
-import dev.techh.collector.PerfUnitCollector;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -21,7 +20,7 @@ public class PerfUnitTransformer implements ClassFileTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final Set<String> TO_TRANSFORM = Set.of(
-            "com.mysql.cj.jdbc.ClientPreparedStatement"
+            "com.mysql.cj.jdbc.ClientPreparedStatement", "dev.techh.integration.service.ExpensiveService"
     );
 
     @Override

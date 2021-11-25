@@ -1,0 +1,13 @@
+rules:
+  dev.techh.integration.service.ExpensiveService:               # Class name
+    - method: testWithArgs(java.lang.String)                      # Optional: if not specified all methods will be instrumented
+      description: Method testWithArgs call to often              # Optional: text description
+      printTrace: true                                          # Optional: print stack-trace in case if limited reached
+      allowUnknownCalls: true                                  # Optional: allow invocation without trace-id (default true)
+      limit:
+          type: trace                                 #  Optional: trace (default) or span        Set limit per trace (usually request) or per span (unit of work)
+          mode: soft                                  #  Optional: hard or soft         If "soft" just log if "hard" exception will be thrown
+          # One or multiple limit can be used at the same time.
+          count: 10                                   #  Numbers of call allowed
+          timeSingle: 100                            #  Single call limit in msec
+          timeTotal: 100                             #  Total time limit in msec

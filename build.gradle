@@ -16,8 +16,15 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
     implementation 'org.javassist:javassist:3.28.0-GA'
     implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation 'ch.qos.logback:logback-classic:1.2.7'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0'
+
+
 }
 
 jar {
