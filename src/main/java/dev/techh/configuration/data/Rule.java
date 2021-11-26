@@ -7,7 +7,7 @@ public class Rule {
 	private boolean allowFail = false;
 	private String key = "traceId";
 	private Limit limit = new Limit();
-	private boolean printTrace = true;
+	private boolean printTrace = false;
 
 	public Rule() {
 	}

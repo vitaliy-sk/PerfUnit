@@ -16,7 +16,7 @@ def jacksonVersion = '2.13.0'
 dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$jUnitVersion"
-    testRuntimeOnly 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jUnitVersion"
 
     implementation 'org.javassist:javassist:3.28.0-GA'
@@ -32,9 +32,15 @@ jar {
     manifest {
         attributes 'Premain-Class': 'dev.techh.PerfUnit'
         attributes 'Can-Retransform-Classes': true
+        attributes 'Boot-Class-Path' : 'perfunit-1.0-SNAPSHOT.jar'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
 test {
     useJUnitPlatform()
+    onlyIf { false }
 }

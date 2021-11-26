@@ -1,0 +1,14 @@
+#### HTTP Example
+
+rules:
+
+#  jdk.internal.net.http.HttpClientImpl#send:
+#    description: Allow to send 1 sync request
+#    limit:
+#      count: 1
+
+  jdk.internal.net.http.HttpClientImpl#sendAsync:
+    description: Allow to send 1 async request not longer that 500 msec
+    limit:
+      count: 1
+      timeSingle: 500

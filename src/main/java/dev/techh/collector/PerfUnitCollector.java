@@ -42,10 +42,8 @@ public class PerfUnitCollector {
         return INSTANCE;
     }
 
-    public void onInvoke(String ruleId, long startTime) {
+    public void onInvoke(String ruleId, String methodSignature, long startTime) {
         long executionTime = System.currentTimeMillis() - startTime;
-
-        LOG.trace("Call [{}] thread [{}] took [{}] msec", ruleId, Thread.currentThread().getName(), executionTime);
 
         Map<String, String> mdc = Optional.ofNullable(MDC.getCopyOfContextMap()).orElse(Collections.emptyMap());
         mdc.forEach((key, value) -> LOG.trace("\t{}={}", key, value));
@@ -55,9 +53,11 @@ public class PerfUnitCollector {
 
         if (!mdc.containsKey(tracingIdKey)) {
             String message = String.format("MDC doesn't have [%s] for tracing ", tracingIdKey);
-            LOG.warn(message);
+          //  LOG.warn(message);
             if (!rule.isAllowUnknownCalls()) throw new UnknownCallerException(message);
             return;
+        } else {
+            LOG.trace("Call [{}] rule [{}] thread [{}] took [{}] msec", methodSignature, rule.getKey(), Thread.currentThread().getName(), executionTime);
         }
 
         String tracingId = mdc.get(tracingIdKey);

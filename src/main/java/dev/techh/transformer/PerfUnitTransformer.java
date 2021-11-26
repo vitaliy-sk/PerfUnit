@@ -75,10 +75,14 @@ public class PerfUnitTransformer implements ClassFileTransformer {
     private void transform(Map.Entry<String, Rule> rule,
                            CtClass ctClass, CtMethod method) throws CannotCompileException, NotFoundException {
 
+        // Skip methods without body
+        if (method.getMethodInfo().getCodeAttribute() == null) return;
+
         method.addLocalVariable("perfUnit_Timer", CtClass.longType);
         method.insertBefore("perfUnit_Timer = System.currentTimeMillis();");
 
-        method.insertAfter(String.format("dev.techh.collector.PerfUnitCollector.getInstance().onInvoke(\"%s\", perfUnit_Timer);", rule.getKey()));
+        String methodSignatureKey = getMethodSignatureKey(method, ctClass.getName());
+        method.insertAfter(String.format("dev.techh.collector.PerfUnitCollector.getInstance().onInvoke(\"%s\", \"%s\", perfUnit_Timer);", rule.getKey(), methodSignatureKey));
     }
 
     private Map.Entry<String, Rule> getRule(CtClass ctClass, CtMethod method) {
@@ -88,10 +92,14 @@ public class PerfUnitTransformer implements ClassFileTransformer {
         String methodKey = String.format("%s#%s", classKey, method.getName());
         if (rules.containsKey(methodKey)) return getRule(methodKey);
 
-        String methodSignatureKey = String.format("%s#%s%s", classKey, method.getName(), Descriptor.toString(method.getSignature()));
+        String methodSignatureKey = getMethodSignatureKey(method, classKey);
         if (rules.containsKey(methodSignatureKey)) return getRule(methodSignatureKey);
 
         return null;
+    }
+
+    private String getMethodSignatureKey(CtMethod method, String name) {
+        return String.format("%s#%s%s", name, method.getName(), Descriptor.toString(method.getSignature()));
     }
 
     private Map.Entry<String, Rule> getRule(String key) {

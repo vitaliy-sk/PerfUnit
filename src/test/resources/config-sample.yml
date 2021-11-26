@@ -7,7 +7,7 @@ rules:
 
 #   dev.techh.integration.service.ExpensiveService#testNoArgs:
 #     description: Method testNoArgs call to often                # Optional: text description
-#     printTrace: true                                            # Optional: print stack-trace in case if limited reached
+#     printTrace: true                                            # Optional: print stack-trace in case if limited reached (default false)
 #     allowUnknownCalls: true                                     # Optional: allow invocation without trace-id (default true)
 #     allowFail: true                                             #  Optional: if "fail" and quota will be reach exception will be thrown
 #     key: traceId                                                #  Optional: key which be used for tracking quota usage. This key should be present in MDC (Default trace-id)
