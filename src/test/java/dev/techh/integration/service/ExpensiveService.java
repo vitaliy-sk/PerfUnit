@@ -1,30 +1,37 @@
 package dev.techh.integration.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-
-import java.lang.invoke.MethodHandles;
-
 public class ExpensiveService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    public String testNoArgs() {
-        return "Test No Args";
+    public long count5InvocationsAllowed() {
+        return System.currentTimeMillis();
     }
 
-    public String testWithArgs(String arg) {
-        return "Test: " + arg;
+    public long count0InvocationsAllowedNotFail() {
+        return System.currentTimeMillis();
     }
 
-    public String testWithDelay(int delay) {
+    public void time10MsecSingleAllowed(int delay) {
+        delay(delay);
+    }
+
+    public void time10MsecTotalAllowed(int delay) {
+        delay(delay);
+    }
+
+    public long unknownCallerNotAllowed() {
+        return System.currentTimeMillis();
+    }
+
+    public long unknownCallerAllowed() {
+        return System.currentTimeMillis();
+    }
+
+    private void delay(int delay) {
         try {
             Thread.sleep(delay);
         } catch (Exception e) {
             e.printStackTrace();
         }
-       return " 1";
     }
 
 }

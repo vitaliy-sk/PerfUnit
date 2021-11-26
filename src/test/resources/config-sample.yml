@@ -4,15 +4,53 @@ rules:
   # dev.techh.integration.service.ExpensiveService - set shared limit to all methods' in the specified class
   # dev.techh.integration.service.ExpensiveService#testWithArgs - set shared limit to all methods with name testWithArgs
   # dev.techh.integration.service.ExpensiveService#testWithArgs(java.lang.String) - set limit testWithArgs with one String argument
-  dev.techh.integration.service.ExpensiveService:
-    description: Method testWithArgs call to often              # Optional: text description
-    printTrace: true                                          # Optional: print stack-trace in case if limited reached
-    allowUnknownCalls: true                                  # Optional: allow invocation without trace-id (default true)
-    allowFail: false                                  #  Optional: if "fail" and quota will be reach exception will be thrown
-    key: traceId                                 #  Optional: key which be used for tracking quota usage. This key should be present in MDC (Default trace-id)
-    limit:
-        # One or multiple limit can be used at the same time.
-        count: 10                                   #  Numbers of call allowed
-        timeSingle: 200                             #  Single call limit in msec
-        timeTotal: 500                              #  Total time limit in msec
 
+#   dev.techh.integration.service.ExpensiveService#testNoArgs:
+#     description: Method testNoArgs call to often                # Optional: text description
+#     printTrace: true                                            # Optional: print stack-trace in case if limited reached
+#     allowUnknownCalls: true                                     # Optional: allow invocation without trace-id (default true)
+#     allowFail: true                                             #  Optional: if "fail" and quota will be reach exception will be thrown
+#     key: traceId                                                #  Optional: key which be used for tracking quota usage. This key should be present in MDC (Default trace-id)
+#     limit:
+#         # One or multiple limit can be used at the same time.
+#         count: 10                                   #  Numbers of call allowed
+#         timeSingle: 200                             #  Single call limit in msec
+#         timeTotal: 500                              #  Total time limit in msec
+
+  dev.techh.integration.service.ExpensiveService#count5InvocationsAllowed:
+    description: count5InvocationsAllowed
+    key: traceId
+    limit:
+        count: 5
+
+  dev.techh.integration.service.ExpensiveService#time10MsecSingleAllowed:
+    description: time10MsecSingleAllowed
+    key: traceId
+    limit:
+      timeSingle: 10
+
+  dev.techh.integration.service.ExpensiveService#time10MsecTotalAllowed:
+    description: time10MsecSingleAllowed
+    key: traceId
+    limit:
+      timeTotal: 10
+
+  dev.techh.integration.service.ExpensiveService#unknownCallerNotAllowed:
+    description: unknownCallerNotAllowed
+    key: traceId
+    allowUnknownCalls: false
+    limit:
+        count: 5
+
+  dev.techh.integration.service.ExpensiveService#unknownCallerAllowed:
+    description: unknownCallerNotAllowed
+    key: traceId
+    limit:
+        count: 5
+
+  dev.techh.integration.service.ExpensiveService#count0InvocationsAllowedNotFail:
+    description: count5InvocationsAllowed
+    key: traceId
+    allowFail: true
+    limit:
+      count: 0

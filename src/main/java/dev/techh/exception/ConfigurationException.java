@@ -1,6 +1,6 @@
 package dev.techh.exception;
 
-public class ConfigurationException extends RuntimeException {
+public class ConfigurationException extends PerfUnitException {
 
     public ConfigurationException(String message) {
         super(message);

@@ -3,6 +3,7 @@ package dev.techh.collector;
 import dev.techh.configuration.data.Configuration;
 import dev.techh.configuration.data.Rule;
 import dev.techh.exception.LimitReachedException;
+import dev.techh.exception.UnknownCallerException;
 import dev.techh.validator.InvocationCountValidator;
 import dev.techh.validator.InvocationTotalTimeValidator;
 import dev.techh.validator.RuleValidator;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,7 +34,8 @@ public class PerfUnitCollector {
     private PerfUnitCollector(Configuration configuration) {
         this.configuration = configuration;
         this.storage = new PerfUnitStorage(configuration.getStorageLimit());
-        this.validators = new RuleValidator[] { new InvocationCountValidator(), new InvocationTotalTimeValidator(), new SingleInvocationTimeValidator() };
+        this.validators = new RuleValidator[]{new InvocationCountValidator(), new InvocationTotalTimeValidator(),
+                new SingleInvocationTimeValidator()};
     }
 
     public static PerfUnitCollector getInstance() {
@@ -44,14 +47,16 @@ public class PerfUnitCollector {
 
         LOG.trace("Call [{}] thread [{}] took [{}] msec", ruleId, Thread.currentThread().getName(), executionTime);
 
-        Map<String, String> mdc = MDC.getCopyOfContextMap();
+        Map<String, String> mdc = Optional.ofNullable(MDC.getCopyOfContextMap()).orElse(Collections.emptyMap());
         mdc.forEach((key, value) -> LOG.trace("\t{}={}", key, value));
 
         Rule rule = configuration.getRules().get(ruleId);
         String tracingIdKey = rule.getKey();
 
         if (!mdc.containsKey(tracingIdKey)) {
-            LOG.warn("MDC doesn't have [{}] for tracing ", tracingIdKey);
+            String message = String.format("MDC doesn't have [%s] for tracing ", tracingIdKey);
+            LOG.warn(message);
+            if (!rule.isAllowUnknownCalls()) throw new UnknownCallerException(message);
             return;
         }
 
@@ -65,19 +70,19 @@ public class PerfUnitCollector {
 
     private void validate(String tracingId, Rule rule, InvocationsInfo invocationsInfo, long executionTime) {
 
-        for ( RuleValidator ruleValidator : validators ) {
+        for (RuleValidator ruleValidator : validators) {
             if (!ruleValidator.support(rule)) continue;
 
             Optional<String> error = ruleValidator.validate(rule, invocationsInfo, executionTime);
             if (error.isEmpty()) continue;
 
-            String failMessage = String.format( "Validation failed: %s\n" +
-                    "\t\tInvocation [%s] (%s) failed\n" +
-                    "\t\tInvocations stat: total count = [%s] total time = [%s] last invoke time = [%s]",
+            String failMessage = String.format("Validation failed: %s\n" +
+                            "\t\tInvocation [%s] (%s) failed\n" +
+                            "\t\tInvocations stat: total count = [%s] total time = [%s] last invoke time = [%s]",
                     error.get(),
                     tracingId, rule.getDescription(),
                     invocationsInfo.getInvocationCount(), invocationsInfo.getTotalTime(), executionTime
-                    );
+            );
 
             LOG.error(failMessage);
 
@@ -86,7 +91,7 @@ public class PerfUnitCollector {
             }
 
             if (!rule.isAllowFail()) {
-              throw new LimitReachedException(failMessage);
+                throw new LimitReachedException(failMessage);
             }
         }
 
