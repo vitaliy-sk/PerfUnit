@@ -2,11 +2,11 @@ package dev.techh.configuration.data;
 
 public class Rule {
 
-	private String description;
+	private String description = "No description";
 	private boolean allowUnknownCalls = true;
 	private boolean allowFail = false;
 	private String key = "traceId";
-	private Limit limit;
+	private Limit limit = new Limit();
 	private boolean printTrace = true;
 
 	public Rule() {

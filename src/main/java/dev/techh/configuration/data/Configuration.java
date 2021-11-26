@@ -1,5 +1,6 @@
 package dev.techh.configuration.data;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -7,7 +8,7 @@ import java.util.stream.Collectors;
 public class Configuration {
 
     private long storageLimit = 100_000_000_000L;
-    private Map<String, Rule> rules;
+    private Map<String, Rule> rules = new HashMap<>();
 
     public long getStorageLimit() {
         return storageLimit;
