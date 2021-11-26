@@ -76,25 +76,32 @@ public class PerfUnitCollector {
             Optional<String> error = ruleValidator.validate(rule, invocationsInfo, executionTime);
             if (error.isEmpty()) continue;
 
-            String failMessage = String.format("Validation failed: %s\n" +
-                            "\t\tInvocation [%s] (%s) failed\n" +
-                            "\t\tInvocations stat: total count = [%s] total time = [%s] last invoke time = [%s]",
-                    error.get(),
-                    tracingId, rule.getDescription(),
-                    invocationsInfo.getInvocationCount(), invocationsInfo.getTotalTime(), executionTime
-            );
-
-            LOG.error(failMessage);
-
-            if (rule.isPrintTrace()) {
-                // TODO Print stack
-            }
-
-            if (!rule.isAllowFail()) {
-                throw new LimitReachedException(failMessage);
-            }
+            failValidation(tracingId, rule, invocationsInfo, executionTime, error.get());
         }
 
+    }
+
+    private void failValidation(String tracingId, Rule rule, InvocationsInfo invocationsInfo, long executionTime, String error) {
+        String failMessage = String.format("Validation failed: %s\n" +
+                        "\t\tInvocation [%s] (%s) failed\n" +
+                        "\t\tInvocations stat: total count = [%s] total time = [%s] last invoke time = [%s]",
+                error,
+                tracingId, rule.getDescription(),
+                invocationsInfo.getInvocationCount(), invocationsInfo.getTotalTime(), executionTime
+        );
+
+
+        LimitReachedException limitReachedException = new LimitReachedException(failMessage);
+
+        if (rule.isPrintTrace()) {
+            LOG.error("", limitReachedException);
+        } else {
+            LOG.error(failMessage);
+        }
+
+        if (!rule.isAllowFail()) {
+            throw limitReachedException;
+        }
     }
 
     private InvocationsInfo captureInvocation(String ruleId, long executionTime, String tracingId) {
