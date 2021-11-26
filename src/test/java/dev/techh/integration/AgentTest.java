@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.lang.invoke.MethodHandles;
-import java.util.UUID;
 
 public class AgentTest {
 
@@ -14,7 +13,7 @@ public class AgentTest {
 
     public static void main(String[] args) {
 
-        int invocations = args.length > 0 ? Integer.parseInt( args[0] ) : 1;
+        int invocations = args.length > 0 ? Integer.parseInt( args[0] ) : 10;
         int requests = args.length > 1 ? Integer.parseInt( args[0] ) : 10;
 
         LOG.info("This is an test app");

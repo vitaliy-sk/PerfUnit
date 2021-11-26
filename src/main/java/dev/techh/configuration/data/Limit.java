@@ -1,49 +1,33 @@
 package dev.techh.configuration.data;
 
 public class Limit{
-	private String key;
-	private String mode;
-	private int timeSingle;
-	private int count;
-	private int timeTotal;
 
-	public String getMode() {
-		return mode;
-	}
+	private long timeSingle = -1;
+	private long count = -1;
+	private long timeTotal = -1;
 
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-
-	public int getTimeSingle() {
+	public long getTimeSingle() {
 		return timeSingle;
 	}
 
-	public void setTimeSingle(int timeSingle) {
+	public void setTimeSingle(long timeSingle) {
 		this.timeSingle = timeSingle;
 	}
 
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 
-	public int getTimeTotal() {
+	public long getTimeTotal() {
 		return timeTotal;
 	}
 
-	public void setTimeTotal(int timeTotal) {
+	public void setTimeTotal(long timeTotal) {
 		this.timeTotal = timeTotal;
 	}
 
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
 }

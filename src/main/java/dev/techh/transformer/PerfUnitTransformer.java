@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.invoke.MethodHandles;
 import java.security.ProtectionDomain;
 import java.util.Map;
@@ -33,9 +32,7 @@ public class PerfUnitTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
-                            ProtectionDomain protectionDomain, byte[] classfileBuffer)
-            throws IllegalClassFormatException {
-
+                            ProtectionDomain protectionDomain, byte[] classfileBuffer) {
 
         String javaClassName = Descriptor.toJavaName(className);
 
@@ -71,8 +68,7 @@ public class PerfUnitTransformer implements ClassFileTransformer {
 
     @Override
     public byte[] transform(Module module, ClassLoader loader, String className, Class<?> classBeingRedefined,
-                            ProtectionDomain protectionDomain, byte[] classfileBuffer)
-            throws IllegalClassFormatException {
+                            ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         return transform(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
     }
 

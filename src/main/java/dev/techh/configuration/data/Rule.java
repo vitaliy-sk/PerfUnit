@@ -1,12 +1,31 @@
 package dev.techh.configuration.data;
 
 public class Rule {
+
 	private String description;
-	private boolean allowUnknownCalls;
+	private boolean allowUnknownCalls = true;
+	private boolean allowFail = false;
+	private String key = "traceId";
 	private Limit limit;
-	private boolean printTrace;
+	private boolean printTrace = true;
 
 	public Rule() {
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public boolean isAllowFail() {
+		return allowFail;
+	}
+
+	public void setAllowFail(boolean allowFail) {
+		this.allowFail = allowFail;
 	}
 
 	public String getDescription() {
