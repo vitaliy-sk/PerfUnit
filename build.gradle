@@ -43,6 +43,9 @@ jar {
 }
 
 test {
+    testLogging.showStandardStreams = true
+    testLogging.exceptionFormat = 'full'
+
     jvmArgs = ["-javaagent:./build/libs/perfunit-${version}.jar=./src/test/resources/config-sample.yml"]
     useJUnitPlatform()
 }
