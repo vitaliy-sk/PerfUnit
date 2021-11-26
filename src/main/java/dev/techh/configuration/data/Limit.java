@@ -1,11 +1,11 @@
 package dev.techh.configuration.data;
 
 public class Limit{
+	private String key;
 	private String mode;
 	private int timeSingle;
 	private int count;
 	private int timeTotal;
-	private String type;
 
 	public String getMode() {
 		return mode;
@@ -39,11 +39,11 @@ public class Limit{
 		this.timeTotal = timeTotal;
 	}
 
-	public String getType() {
-		return type;
+	public String getKey() {
+		return key;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setKey(String key) {
+		this.key = key;
 	}
 }

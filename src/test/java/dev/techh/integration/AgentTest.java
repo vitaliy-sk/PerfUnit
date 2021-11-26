@@ -1,12 +1,16 @@
 package dev.techh.integration;
 
 import dev.techh.integration.service.ExpensiveService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import java.util.Random;
+import java.lang.invoke.MethodHandles;
 import java.util.UUID;
 
 public class AgentTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private ExpensiveService expensiveService = new ExpensiveService();
 
@@ -22,10 +26,9 @@ public class AgentTest {
 
         int invocations = args.length > 0 ? Integer.parseInt( args[0] ) : 10;
 
-        System.out.println("This is an test app");
+        LOG.info("This is an test app");
 
-        MDC.put("trace-id", UUID.randomUUID().toString());
-        MDC.put("span-id", UUID.randomUUID().toString());
+        MDC.put("traceId", UUID.randomUUID().toString());
 
         AgentTest agentTest = new AgentTest();
 

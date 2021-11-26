@@ -2,7 +2,6 @@ package dev.techh.configuration.data;
 
 public class Rule {
 	private String description;
-	private String method;
 	private boolean allowUnknownCalls;
 	private Limit limit;
 	private boolean printTrace;
@@ -16,14 +15,6 @@ public class Rule {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getMethod() {
-		return method;
-	}
-
-	public void setMethod(String method) {
-		this.method = method;
 	}
 
 	public boolean isAllowUnknownCalls() {

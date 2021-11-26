@@ -19,7 +19,7 @@ public class PerfUnit {
         Configuration configuration = ConfigurationLoader.load(arguments);
         LOG.info("Loaded config {}", configuration);
 
-        instrumentation.addTransformer(new PerfUnitTransformer());
+        instrumentation.addTransformer(new PerfUnitTransformer(configuration));
     }
 
 }

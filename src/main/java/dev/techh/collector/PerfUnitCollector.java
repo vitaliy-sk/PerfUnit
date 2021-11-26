@@ -16,10 +16,11 @@ public class PerfUnitCollector {
         return INSTANCE;
     }
 
-    public void onInvoke(String method) {
-        LOG.info("Call {} thread {}", method, Thread.currentThread().getName());
+    public void onInvoke(String ruleKey, long startTime) {
+        long executionTime = System.currentTimeMillis() - startTime;
+        LOG.trace("Call [{}] thread [{}] took [{}] msec", ruleKey, Thread.currentThread().getName(), executionTime);
         Map<String, String> mdc = MDC.getCopyOfContextMap();
-        mdc.forEach((key, value) -> LOG.info("\t{}={}", key, value));
+        mdc.forEach((key, value) -> LOG.trace("\t{}={}", key, value));
     }
 
 }
