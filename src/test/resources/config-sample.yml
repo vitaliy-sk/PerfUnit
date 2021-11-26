@@ -11,6 +11,7 @@ rules:
 #     allowUnknownCalls: true                                     # Optional: allow invocation without trace-id (default true)
 #     allowFail: true                                             #  Optional: if "fail" and quota will be reach exception will be thrown
 #     key: traceId                                                #  Optional: key which be used for tracking quota usage. This key should be present in MDC (Default trace-id)
+#     onlyPublic: true                                            # Optional: instrument only public methods (default true)
 #     limit:
 #         # One or multiple limit can be used at the same time.
 #         count: 10                                   #  Numbers of call allowed

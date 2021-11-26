@@ -8,6 +8,7 @@ public class Rule {
 	private String key = "traceId";
 	private Limit limit = new Limit();
 	private boolean printTrace = false;
+	private boolean onlyPublic = true;
 
 	public Rule() {
 	}
@@ -60,4 +61,11 @@ public class Rule {
 		this.printTrace = printTrace;
 	}
 
+	public boolean isOnlyPublic() {
+		return onlyPublic;
+	}
+
+	public void setOnlyPublic(boolean onlyPublic) {
+		this.onlyPublic = onlyPublic;
+	}
 }

@@ -53,7 +53,6 @@ public class PerfUnitCollector {
 
         if (!mdc.containsKey(tracingIdKey)) {
             String message = String.format("MDC doesn't have [%s] for tracing ", tracingIdKey);
-          //  LOG.warn(message);
             if (!rule.isAllowUnknownCalls()) throw new UnknownCallerException(message);
             return;
         } else {
@@ -64,11 +63,11 @@ public class PerfUnitCollector {
         InvocationsInfo invocationsInfo = captureInvocation(ruleId, executionTime, tracingId);
         LOG.trace("{}", invocationsInfo);
 
-        validate(tracingId, rule, invocationsInfo, executionTime);
+        validate(tracingId, ruleId, rule, invocationsInfo, executionTime);
 
     }
 
-    private void validate(String tracingId, Rule rule, InvocationsInfo invocationsInfo, long executionTime) {
+    private void validate(String tracingId, String ruleId, Rule rule, InvocationsInfo invocationsInfo, long executionTime) {
 
         for (RuleValidator ruleValidator : validators) {
             if (!ruleValidator.support(rule)) continue;
@@ -76,17 +75,17 @@ public class PerfUnitCollector {
             Optional<String> error = ruleValidator.validate(rule, invocationsInfo, executionTime);
             if (error.isEmpty()) continue;
 
-            failValidation(tracingId, rule, invocationsInfo, executionTime, error.get());
+            failValidation(tracingId, ruleId, rule, invocationsInfo, executionTime, error.get());
         }
 
     }
 
-    private void failValidation(String tracingId, Rule rule, InvocationsInfo invocationsInfo, long executionTime, String error) {
+    private void failValidation(String tracingId, String ruleId, Rule rule, InvocationsInfo invocationsInfo, long executionTime, String error) {
         String failMessage = String.format("Validation failed: %s\n" +
-                        "\t\tInvocation [%s] (%s) failed\n" +
+                        "\t\tInvocation id [%s] failed. Rule id [%s] (%s) \n" +
                         "\t\tInvocations stat: total count = [%s] total time = [%s] last invoke time = [%s]",
                 error,
-                tracingId, rule.getDescription(),
+                tracingId, ruleId, rule.getDescription(),
                 invocationsInfo.getInvocationCount(), invocationsInfo.getTotalTime(), executionTime
         );
 

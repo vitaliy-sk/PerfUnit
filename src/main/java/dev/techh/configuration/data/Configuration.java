@@ -35,7 +35,7 @@ public class Configuration {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        rules.forEach((key, rule) -> sb.append(key));
+        rules.forEach((key, rule) -> sb.append(key).append(System.lineSeparator()));
         return sb.toString();
     }
 }

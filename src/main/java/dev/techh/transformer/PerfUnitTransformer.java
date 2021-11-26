@@ -8,6 +8,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.LoaderClassPath;
 import javassist.NotFoundException;
+import javassist.bytecode.AccessFlag;
 import javassist.bytecode.Descriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class PerfUnitTransformer implements ClassFileTransformer {
 
         if (!includedClasses.contains(javaClassName)) return classfileBuffer;
 
-        LOG.debug("|- Class [{}]", javaClassName);
+        LOG.info("|- Class [{}]", javaClassName);
 
         try {
             ClassPool cp = ClassPool.getDefault();
@@ -51,8 +52,11 @@ public class PerfUnitTransformer implements ClassFileTransformer {
 
             for (CtMethod method : methods) {
                 Map.Entry<String, Rule> rule = getRule(ctClass, method);
+
                 if (rule != null) {
-                    LOG.debug("\t|-[+] Method [{}]", method.getLongName());
+                    if (rule.getValue().isOnlyPublic() && !isPublic(method)) continue;
+
+                    LOG.info("\t|-[+] Method [{}]", method.getLongName());
                     transform(rule, ctClass, method);
                 }
             }
@@ -82,7 +86,9 @@ public class PerfUnitTransformer implements ClassFileTransformer {
         method.insertBefore("perfUnit_Timer = System.currentTimeMillis();");
 
         String methodSignatureKey = getMethodSignatureKey(method, ctClass.getName());
-        method.insertAfter(String.format("dev.techh.collector.PerfUnitCollector.getInstance().onInvoke(\"%s\", \"%s\", perfUnit_Timer);", rule.getKey(), methodSignatureKey));
+        method.insertAfter(String.format(
+                "dev.techh.collector.PerfUnitCollector.getInstance().onInvoke(\"%s\", \"%s\", perfUnit_Timer);",
+                rule.getKey(), methodSignatureKey));
     }
 
     private Map.Entry<String, Rule> getRule(CtClass ctClass, CtMethod method) {
@@ -100,6 +106,10 @@ public class PerfUnitTransformer implements ClassFileTransformer {
 
     private String getMethodSignatureKey(CtMethod method, String name) {
         return String.format("%s#%s%s", name, method.getName(), Descriptor.toString(method.getSignature()));
+    }
+
+    private boolean isPublic(CtMethod method) {
+        return method.getMethodInfo() != null && AccessFlag.isPublic(method.getMethodInfo().getAccessFlags());
     }
 
     private Map.Entry<String, Rule> getRule(String key) {

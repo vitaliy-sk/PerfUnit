@@ -16,6 +16,12 @@ public class PerfUnit {
 
     public static void premain(String arguments, Instrumentation instrumentation) {
 
+        LOG.info("\n" +
+                "   ___               ___  __  __         _   __ \n" +
+                "  / _ \\ ___   ____  / _/ / / / /  ___   (_) / /_\n" +
+                " / ___// -_) / __/ / _/ / /_/ /  / _ \\ / / / __/\n" +
+                "/_/    \\__/ /_/   /_/   \\____/  /_//_//_/  \\__/ \n");
+
         if (arguments == null) {
             LOG.error("Please specify config path. -javaagent:perfunit.jar=<CONFIG_PATH>");
             System.exit(-1);
@@ -25,7 +31,7 @@ public class PerfUnit {
         Configuration configuration = ConfigurationLoader.load(arguments);
         LOG.info("Loaded config {}", configuration);
         PerfUnitCollector.create(configuration);
-
+        LOG.info("Starting transformations...");
         instrumentation.addTransformer(new PerfUnitTransformer(configuration));
     }
 
