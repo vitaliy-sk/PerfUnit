@@ -1,5 +1,6 @@
 package dev.techh;
 
+import dev.techh.collector.PerfUnitCollector;
 import dev.techh.configuration.ConfigurationLoader;
 import dev.techh.configuration.data.Configuration;
 import dev.techh.transformer.PerfUnitTransformer;
@@ -18,6 +19,7 @@ public class PerfUnit {
         LOG.info("Starting PerfUnit agent with config {}", arguments);
         Configuration configuration = ConfigurationLoader.load(arguments);
         LOG.info("Loaded config {}", configuration);
+        PerfUnitCollector.create(configuration);
 
         instrumentation.addTransformer(new PerfUnitTransformer(configuration));
     }

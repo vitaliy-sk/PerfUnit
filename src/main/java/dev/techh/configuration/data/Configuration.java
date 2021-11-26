@@ -6,7 +6,16 @@ import java.util.stream.Collectors;
 
 public class Configuration {
 
+    private long storageLimit = 100_000_000_000L;
     private Map<String, Rule> rules;
+
+    public long getStorageLimit() {
+        return storageLimit;
+    }
+
+    public void setStorageLimit(long storageLimit) {
+        this.storageLimit = storageLimit;
+    }
 
     public Map<String, Rule> getRules() {
         return rules;

@@ -1,8 +1,10 @@
+storageLimit: 100_000_000_000  # Store last 100M calls (default 100M), specify -1 for unlimited storage (may cause out of memory)
+
 rules:
-  # dev.techh.integration.service.ExpensiveService - instrument all methods' in the specified class
-  # dev.techh.integration.service.ExpensiveService#testWithArgs - instrument all methods with name testWithArgs
-  # dev.techh.integration.service.ExpensiveService#testWithArgs(java.lang.String) - instrument method testWithArgs with one String argument
-  dev.techh.integration.service.ExpensiveService#testWithArgs(java.lang.String):  # Class name
+  # dev.techh.integration.service.ExpensiveService - set shared limit to all methods' in the specified class
+  # dev.techh.integration.service.ExpensiveService#testWithArgs - set shared limit to all methods with name testWithArgs
+  # dev.techh.integration.service.ExpensiveService#testWithArgs(java.lang.String) - set limit testWithArgs with one String argument
+  dev.techh.integration.service.ExpensiveService:
     description: Method testWithArgs call to often              # Optional: text description
     printTrace: true                                          # Optional: print stack-trace in case if limited reached
     allowUnknownCalls: true                                  # Optional: allow invocation without trace-id (default true)
@@ -11,6 +13,6 @@ rules:
         mode: soft                                  #  Optional: hard or soft         If "soft" just log if "hard" exception will be thrown
         # One or multiple limit can be used at the same time.
         count: 10                                   #  Numbers of call allowed
-        timeSingle: 100                            #  Single call limit in msec
-        timeTotal: 100                             #  Total time limit in msec
+        timeSingle: 100                             #  Single call limit in msec
+        timeTotal: 100                              #  Total time limit in msec
 

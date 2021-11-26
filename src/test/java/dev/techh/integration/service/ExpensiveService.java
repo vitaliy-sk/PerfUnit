@@ -11,13 +11,20 @@ public class ExpensiveService {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public String testNoArgs() {
-        LOG.info("Test no args invoked. MDC = {}", MDC.getCopyOfContextMap());
         return "Test No Args";
     }
 
     public String testWithArgs(String arg) {
-        LOG.info("Test with arg = {} invoked. MDC = {}", arg, MDC.getCopyOfContextMap());
         return "Test: " + arg;
+    }
+
+    public String testWithDelay(int delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       return " 1";
     }
 
 }

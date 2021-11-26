@@ -79,13 +79,10 @@ public class PerfUnitTransformer implements ClassFileTransformer {
     private void transform(Map.Entry<String, Rule> rule,
                            CtClass ctClass, CtMethod method) throws CannotCompileException, NotFoundException {
 
-        method.addLocalVariable("perfUnit_Rule", ctClass.getClassPool().get("java.lang.String"));
-        method.insertBefore(String.format("String perfUnit_Rule = \"%s\";", rule.getKey()));
-
         method.addLocalVariable("perfUnit_Timer", CtClass.longType);
         method.insertBefore("perfUnit_Timer = System.currentTimeMillis();");
 
-        method.insertAfter("dev.techh.collector.PerfUnitCollector.getInstance().onInvoke(perfUnit_Rule, perfUnit_Timer);");
+        method.insertAfter(String.format("dev.techh.collector.PerfUnitCollector.getInstance().onInvoke(\"%s\", perfUnit_Timer);", rule.getKey()));
     }
 
     private Map.Entry<String, Rule> getRule(CtClass ctClass, CtMethod method) {
