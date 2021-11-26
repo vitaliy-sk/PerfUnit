@@ -16,6 +16,11 @@ public class PerfUnit {
 
     public static void premain(String arguments, Instrumentation instrumentation) {
 
+        if (arguments == null) {
+            LOG.error("Please specify config path. -javaagent:perfunit.jar=<CONFIG_PATH>");
+            System.exit(-1);
+        }
+
         LOG.info("Starting PerfUnit agent with config {}", arguments);
         Configuration configuration = ConfigurationLoader.load(arguments);
         LOG.info("Loaded config {}", configuration);

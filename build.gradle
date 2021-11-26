@@ -43,6 +43,6 @@ jar {
 }
 
 test {
+    jvmArgs = ["-javaagent:./build/libs/perfunit-${version}.jar=./src/test/resources/config-sample.yml"]
     useJUnitPlatform()
-    onlyIf { false }
 }
