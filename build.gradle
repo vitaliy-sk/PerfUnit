@@ -3,8 +3,10 @@ plugins {
     id 'java'
 }
 
+def agentVersion = '1.0-SNAPSHOT'
+
 group 'dev.techh'
-version '1.0-SNAPSHOT'
+version agentVersion
 
 repositories {
     mavenCentral()
@@ -32,7 +34,7 @@ jar {
     manifest {
         attributes 'Premain-Class': 'dev.techh.PerfUnit'
         attributes 'Can-Retransform-Classes': true
-        attributes 'Boot-Class-Path' : 'perfunit-1.0-SNAPSHOT.jar'
+        attributes 'Boot-Class-Path' : "perfunit-${agentVersion}.jar"
     }
 
     from {
