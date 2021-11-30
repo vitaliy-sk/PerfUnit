@@ -32,7 +32,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Premain-Class': 'dev.techh.PerfUnit'
+        attributes 'Premain-Class': 'dev.techh.perfunit.PerfUnit'
         attributes 'Can-Retransform-Classes': true
         attributes 'Boot-Class-Path' : "perfunit-${agentVersion}.jar"
     }
