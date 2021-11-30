@@ -1,5 +1,7 @@
 package dev.techh.collector;
 
+import dev.techh.configuration.data.Rule;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,9 +22,9 @@ public class PerfUnitStorage {
         }
     }
 
-    public InvocationsInfo getInfo( String ruleId, String tracingId ) {
-        String key = tracingId + ":" + ruleId;
-        return data.computeIfAbsent( key, (_x) -> new InvocationsInfo(ruleId, tracingId) );
+    public InvocationsInfo getInfo(Rule rule, String tracingId ) {
+        String key = tracingId + ":" + rule.getId();
+        return data.computeIfAbsent( key, (_x) -> new InvocationsInfo(rule, tracingId) );
     }
 
     private Map<String, InvocationsInfo> createStorageWithLimit(final long maxEntries) {

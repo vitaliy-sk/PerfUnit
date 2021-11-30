@@ -23,6 +23,7 @@ public class Configuration {
     }
 
     public void setRules(Map<String, Rule> rules) {
+        rules.forEach( (id, rule) -> rule.setId(id) );
         this.rules = rules;
     }
 

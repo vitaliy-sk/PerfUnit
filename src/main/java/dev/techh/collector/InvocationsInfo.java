@@ -1,22 +1,24 @@
 package dev.techh.collector;
 
+import dev.techh.configuration.data.Rule;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 public class InvocationsInfo {
 
-    private final String ruleId;
+    private final Rule rule;
     private final String tracingId;
 
     private final AtomicLong invocationCount = new AtomicLong(0);
     private final AtomicLong totalTime = new AtomicLong(0);
 
-    public InvocationsInfo(String ruleId, String tracingId) {
-        this.ruleId = ruleId;
+    public InvocationsInfo(Rule rule, String tracingId) {
+        this.rule = rule;
         this.tracingId = tracingId;
     }
 
-    public String getRuleId() {
-        return ruleId;
+    public Rule getRule() {
+        return rule;
     }
 
     public String getTracingId() {
@@ -42,7 +44,7 @@ public class InvocationsInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Invocation{");
-        sb.append("ruleId='").append(ruleId).append('\'');
+        sb.append("ruleId='").append(rule.getId()).append('\'');
         sb.append(", tracingId='").append(tracingId).append('\'');
         sb.append(", invocationCount=").append(invocationCount);
         sb.append(", totalTime=").append(totalTime);

@@ -2,10 +2,11 @@ package dev.techh.configuration.data;
 
 public class Rule {
 
+	private String id;
 	private String description = "No description";
 	private boolean allowUnknownCalls = true;
 	private boolean allowFail = false;
-	private String key = "traceId";
+	private String tracingKey = "traceId";
 	private Limit limit = new Limit();
 	private boolean printTrace = false;
 	private boolean onlyPublic = true;
@@ -13,12 +14,21 @@ public class Rule {
 	public Rule() {
 	}
 
-	public String getKey() {
-		return key;
+
+	public String getId() {
+		return id;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getTracingKey() {
+		return tracingKey;
+	}
+
+	public void setTracingKey(String tracingKey) {
+		this.tracingKey = tracingKey;
 	}
 
 	public boolean isAllowFail() {
@@ -67,5 +77,14 @@ public class Rule {
 
 	public void setOnlyPublic(boolean onlyPublic) {
 		this.onlyPublic = onlyPublic;
+	}
+
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("Rule{");
+		sb.append("id='").append(id).append('\'');
+		sb.append(", description='").append(description).append('\'');
+		sb.append('}');
+		return sb.toString();
 	}
 }

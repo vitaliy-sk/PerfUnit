@@ -10,7 +10,7 @@ rules:
 #     printTrace: true                                            # Optional: print stack-trace in case if limited reached (default false)
 #     allowUnknownCalls: true                                     # Optional: allow invocation without trace-id (default true)
 #     allowFail: true                                             #  Optional: if "fail" and quota will be reach exception will be thrown
-#     key: traceId                                                #  Optional: key which be used for tracking quota usage. This key should be present in MDC (Default trace-id)
+#     tracingKey: traceId                                                #  Optional: key which be used for tracking quota usage. This key should be present in MDC (Default trace-id)
 #     onlyPublic: true                                            # Optional: instrument only public methods (default true)
 #     limit:
 #         # One or multiple limit can be used at the same time.
@@ -20,38 +20,38 @@ rules:
 
   dev.techh.integration.service.ExpensiveService#count5InvocationsAllowed:
     description: count5InvocationsAllowed
-    key: traceId
+    tracingKey: traceId
     limit:
         count: 5
 
   dev.techh.integration.service.ExpensiveService#time10MsecSingleAllowed:
     description: time10MsecSingleAllowed
-    key: traceId
+    tracingKey: traceId
     limit:
       timeSingle: 10
 
   dev.techh.integration.service.ExpensiveService#time10MsecTotalAllowed:
     description: time10MsecSingleAllowed
-    key: traceId
+    tracingKey: traceId
     limit:
       timeTotal: 10
 
   dev.techh.integration.service.ExpensiveService#unknownCallerNotAllowed:
     description: unknownCallerNotAllowed
-    key: traceId
+    tracingKey: traceId
     allowUnknownCalls: false
     limit:
         count: 5
 
   dev.techh.integration.service.ExpensiveService#unknownCallerAllowed:
     description: unknownCallerNotAllowed
-    key: traceId
+    tracingKey: traceId
     limit:
         count: 5
 
   dev.techh.integration.service.ExpensiveService#count0InvocationsAllowedNotFail:
     description: count5InvocationsAllowed
-    key: traceId
+    tracingKey: traceId
     allowFail: true
     limit:
       count: 0

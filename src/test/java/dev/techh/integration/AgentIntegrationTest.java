@@ -36,7 +36,7 @@ public class AgentIntegrationTest {
             }
         });
 
-        assertThat(exception.getMessage(), startsWith("Validation failed: Total invocation count [6] > [5]"));
+        assertThat(exception.getMessage(), startsWith("Total invocation count [6] > [5]"));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class AgentIntegrationTest {
             }
         });
 
-        assertThat(exception.getMessage(), startsWith("Validation failed: Single invocation time"));
+        assertThat(exception.getMessage(), startsWith("Single invocation time"));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class AgentIntegrationTest {
             }
         });
 
-        assertThat(exception.getMessage(), startsWith("Validation failed: Total invocation time"));
+        assertThat(exception.getMessage(), startsWith("Total invocation time"));
     }
 
     @Test
