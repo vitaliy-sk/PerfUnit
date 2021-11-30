@@ -4,7 +4,7 @@ import dev.techh.perfunit.configuration.data.Configuration;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
 import dev.techh.perfunit.exception.UnknownCallerException;
-import dev.techh.perfunit.reporter.ConsoleReporter;
+import dev.techh.perfunit.reporter.FileMarkdownReporter;
 import dev.techh.perfunit.reporter.Reporter;
 import dev.techh.perfunit.validator.InvocationCountValidator;
 import dev.techh.perfunit.validator.InvocationTotalTimeValidator;
@@ -30,7 +30,8 @@ public class PerfUnitCollector {
     private final PerfUnitStorage storage;
 
     private final RuleValidator[] validators;
-    private final Reporter[] reporters = {new ConsoleReporter()}; // TODO Load from yaml
+    // new ConsoleReporter(),
+    private final Reporter[] reporters = { new FileMarkdownReporter()}; // TODO Load from yaml
 
     public static void create(Configuration configuration) {
         if (INSTANCE == null) INSTANCE = new PerfUnitCollector(configuration);

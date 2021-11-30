@@ -7,12 +7,12 @@ import java.util.Map;
 
 public class LimitReachedException extends PerfUnitException {
 
-    private String message;
-    private String tracingId;
-    private Rule rule;
-    private InvocationsInfo invocationsInfo;
-    private long executionTime;
-    private Map<String, String> metadata;
+    private final String message;
+    private final String tracingId;
+    private final Rule rule;
+    private final InvocationsInfo invocationsInfo;
+    private final long executionTime;
+    private final Map<String, String> metadata;
 
     public LimitReachedException(String message, String tracingId, Rule rule, InvocationsInfo invocationsInfo,
                                  long lastExecutionTime, Map<String, String> metadata) {
@@ -51,14 +51,6 @@ public class LimitReachedException extends PerfUnitException {
 
     @Override
     public String toString() {
-//        String failMessage = String.format("Validation failed: %s\n" +
-//                        "\t\tInvocation id [%s] failed. Rule id [%s] (%s) \n" +
-//                        "\t\tInvocations stat: total count = [%s] total time = [%s] last invoke time = [%s]",
-//                ruleFailMessage,
-//                getTracingId(rule), rule.getId(), rule.getDescription(),
-//                invocationsInfo.getInvocationCount(), invocationsInfo.getTotalTime(), executionTime
-//        );
-
         final StringBuilder sb = new StringBuilder("Validation {");
         sb.append("message='").append(message).append('\'');
         sb.append(", tracingId='").append(tracingId).append('\'');

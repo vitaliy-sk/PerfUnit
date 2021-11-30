@@ -32,3 +32,4 @@ out/
 .vscode/
 
 .DS_Store
+perfunit-report/

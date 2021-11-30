@@ -1,0 +1,17 @@
+#### Violation
+
+#### Info
+
+* **Trace ID:** {{ exception.tracingId }}
+* **Message:** {{ exception.message }}
+* **Total invocation count:** {{ exception.invocationsInfo.invocationCount }}
+* **Total took time:** {{ exception.invocationsInfo.totalTime }} ms
+* **Last invocation time:** {{ exception.executionTime }} ms
+
+#### Trace
+
+```java
+{{{ trace }}}
+```
+
+-----

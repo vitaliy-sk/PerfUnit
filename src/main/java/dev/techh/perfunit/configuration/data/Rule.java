@@ -1,5 +1,7 @@
 package dev.techh.perfunit.configuration.data;
 
+import java.util.Objects;
+
 public class Rule {
 
 	private String id;
@@ -77,6 +79,19 @@ public class Rule {
 
 	public void setOnlyPublic(boolean onlyPublic) {
 		this.onlyPublic = onlyPublic;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Rule rule = (Rule) o;
+		return id.equals(rule.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
 	@Override

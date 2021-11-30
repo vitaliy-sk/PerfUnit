@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.javassist:javassist:3.28.0-GA'
     implementation 'org.slf4j:slf4j-api:1.7.32'
     implementation 'ch.qos.logback:logback-classic:1.2.7'
+    implementation 'com.github.spullara.mustache.java:compiler:0.9.10'
 
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"

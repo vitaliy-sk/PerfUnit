@@ -1,0 +1,11 @@
+# PerfUnit test summary report
+Generation time: {{ date }}
+
+## Violated rules
+
+
+| Violation count 	| Rule id 	                            | Rule description 	                                                                        |
+|-----------------	|-------------------------------------- |------------------------------------------------------------------------------------------	|
+{{#violations}}
+| {{ value }}       | {{ key.id }}        	                |    {{ key.description }}                                              	                |
+{{/violations}}
