@@ -19,3 +19,7 @@ Per rule:
 * Violations per rule + dump (In-memory) ( rule_id,  < dump_id, violation_counter > )
 
 * Unique thread dumps (Limited in-memory + Disk write) ( < dump_id, stack_trace_string> )
+
+### TODO
+
+* Switcher for reporters

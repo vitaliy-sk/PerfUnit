@@ -1,6 +1,16 @@
 storageLimit: 1_000_000_000  # Store last 1M calls (default 1M), specify -1 for unlimited storage (may cause out of memory)
 reportPath: ./perfunit-report
 
+reporters:
+  saveTraces: true
+
+  console:
+    enable: true
+    printTrace: false
+
+  markdown:
+    enable: true
+
 rules:
   # dev.techh.perfunit.integration.service.ExpensiveService - set shared limit to all methods' in the specified class
   # dev.techh.perfunit.integration.service.ExpensiveService#testWithArgs - set shared limit to all methods with name testWithArgs

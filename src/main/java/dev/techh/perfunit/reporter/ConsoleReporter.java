@@ -1,7 +1,7 @@
 package dev.techh.perfunit.reporter;
 
-import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
+import io.micronaut.context.annotation.Property;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +13,13 @@ public class ConsoleReporter implements Reporter {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    @Property(name = "reporters.console.printTrace", defaultValue = "false")
+    private boolean printTrace;
+
     @Override
     public void onFailure(LimitReachedException limitReachedException) {
 
-        Rule rule = limitReachedException.getRule();
-
-        // TODO Move to console reporter config section
-        if (rule.isPrintTrace()) {
+        if (printTrace) {
             LOG.error("", limitReachedException);
         } else {
             LOG.error(limitReachedException.toString());

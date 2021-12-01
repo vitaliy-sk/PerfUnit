@@ -46,7 +46,7 @@ public class FileService {
         try {
             LOG.info("Creating folder [{}]", folder.getAbsolutePath());
             if (folder.exists()) { removeFolder(folder); }
-            else folder.mkdirs();
+            folder.mkdirs();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

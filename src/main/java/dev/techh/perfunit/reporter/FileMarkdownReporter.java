@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
             save(file, ruleHeaderTemplate, Map.of("rule", rule,
                     "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.size()), true);
 
-            Map<Long, Integer> violationPerStack = violationsPerStack.get(rule);
+            Map<Long, Integer> violationPerStack = violationsPerStack.getOrDefault(rule, Collections.emptyMap());
 
             violationPerStack.entrySet().stream().sorted(Map.Entry.comparingByValue())
                     .forEach( ( entry ) -> {

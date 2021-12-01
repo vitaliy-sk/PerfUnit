@@ -5,6 +5,7 @@ import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
 import dev.techh.perfunit.file.FileService;
 import dev.techh.perfunit.utils.StackTraceUtils;
+import io.micronaut.context.annotation.Property;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -48,6 +49,9 @@ public class PerfUnitStorage {
     @Inject
     private FileService fileService;
 
+    @Property(name = "reporters.saveTraces", defaultValue = "true")
+    private boolean saveTraces;
+
     public PerfUnitStorage(Configuration configuration) {
         initStorage(configuration);
     }
@@ -66,7 +70,13 @@ public class PerfUnitStorage {
 
         violationsPerRule.put(rule, violationsPerRule.getOrDefault(rule, 0) + 1);
 
-        // TODO Add possibility to disable saving stacks
+        if ( saveTraces ) {
+            saveTrace(limitReachedException, rule);
+        }
+
+    }
+
+    private void saveTrace(LimitReachedException limitReachedException, Rule rule) {
         String stackTrace = StackTraceUtils.stackTraceToString(limitReachedException);
         long stackTraceId = StackTraceUtils.stackId(stackTrace);
 
@@ -77,7 +87,6 @@ public class PerfUnitStorage {
 
         Map<Long, Integer> stackCounter = violationsPerStack.computeIfAbsent(rule, (_k) -> new HashMap<>());
         stackCounter.put(stackTraceId, stackCounter.getOrDefault(stackTraceId, 0) + 1);
-
     }
 
     public String getStackTrace(long stackTraceId) {
@@ -87,7 +96,7 @@ public class PerfUnitStorage {
         } catch (IOException e) {
             LOG.error("Unable to open file", e);
         }
-        return "Unable to load stack";
+        return saveTraces ? "Unable to load stack" : "Stack saving disabled";
     }
 
 

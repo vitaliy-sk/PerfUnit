@@ -10,7 +10,6 @@ public class Rule {
 	private boolean allowFail = false;
 	private String tracingKey = "traceId";
 	private Limit limit = new Limit();
-	private boolean printTrace = false;
 	private boolean onlyPublic = true;
 
 	public Rule() {
@@ -63,14 +62,6 @@ public class Rule {
 
 	public void setLimit(Limit limit) {
 		this.limit = limit;
-	}
-
-	public boolean isPrintTrace() {
-		return printTrace;
-	}
-
-	public void setPrintTrace(boolean printTrace) {
-		this.printTrace = printTrace;
 	}
 
 	public boolean isOnlyPublic() {
