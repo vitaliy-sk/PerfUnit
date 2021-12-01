@@ -2,9 +2,11 @@ package dev.techh.perfunit.validator;
 
 import dev.techh.perfunit.collector.InvocationsInfo;
 import dev.techh.perfunit.configuration.data.Rule;
+import jakarta.inject.Singleton;
 
 import java.util.Optional;
 
+@Singleton
 public class SingleInvocationTimeValidator implements RuleValidator {
 
     @Override

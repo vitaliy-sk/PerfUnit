@@ -2,6 +2,7 @@ package dev.techh.perfunit.transformer;
 
 import dev.techh.perfunit.configuration.data.Configuration;
 import dev.techh.perfunit.configuration.data.Rule;
+import jakarta.inject.Singleton;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -18,6 +19,7 @@ import java.security.ProtectionDomain;
 import java.util.Map;
 import java.util.Set;
 
+@Singleton
 public class PerfUnitTransformer implements ClassFileTransformer {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

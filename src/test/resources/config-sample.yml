@@ -1,4 +1,5 @@
-storageLimit: 100_000_000_000  # Store last 100M calls (default 100M), specify -1 for unlimited storage (may cause out of memory)
+storageLimit: 1_000_000_000  # Store last 1M calls (default 1M), specify -1 for unlimited storage (may cause out of memory)
+reportPath: ./perfunit-report
 
 rules:
   # dev.techh.perfunit.integration.service.ExpensiveService - set shared limit to all methods' in the specified class

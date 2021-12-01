@@ -7,7 +7,10 @@
         </encoder>
     </appender>
 
-    <root level="trace">
+    <logger name="dev.techh.perfunit" level="trace" />
+
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
+
 </configuration>

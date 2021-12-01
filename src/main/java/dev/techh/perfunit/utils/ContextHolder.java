@@ -2,7 +2,7 @@ package dev.techh.perfunit.utils;
 
 import io.micronaut.context.ApplicationContext;
 
-public class Context {
+public class ContextHolder {
 
     private static ApplicationContext INSTANCE;
 
@@ -11,7 +11,7 @@ public class Context {
     }
 
     public static void setContext(ApplicationContext context) {
-        Context.INSTANCE = context;
+        ContextHolder.INSTANCE = context;
     }
 
 }

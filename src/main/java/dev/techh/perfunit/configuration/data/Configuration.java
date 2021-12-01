@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 public class Configuration {
 
-    private long storageLimit = 100_000_000_000L;
+    private long storageLimit = 1_000_000_000L;
+    private String reportPath = "./perfunit-report";
+
     private Map<String, Rule> rules = new HashMap<>();
 
     public long getStorageLimit() {
@@ -38,5 +40,13 @@ public class Configuration {
         final StringBuilder sb = new StringBuilder();
         rules.forEach((key, rule) -> sb.append(key).append(System.lineSeparator()));
         return sb.toString();
+    }
+
+    public String getReportPath() {
+        return reportPath;
+    }
+
+    public void setReportPath(String reportPath) {
+        this.reportPath = reportPath;
     }
 }

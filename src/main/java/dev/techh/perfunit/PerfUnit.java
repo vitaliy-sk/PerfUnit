@@ -1,14 +1,14 @@
 package dev.techh.perfunit;
 
-import dev.techh.perfunit.collector.PerfUnitCollector;
-import dev.techh.perfunit.configuration.ConfigurationLoader;
-import dev.techh.perfunit.configuration.data.Configuration;
 import dev.techh.perfunit.transformer.PerfUnitTransformer;
+import dev.techh.perfunit.utils.ContextHolder;
+import io.micronaut.context.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.invoke.MethodHandles;
+import java.util.Map;
 
 public class PerfUnit {
 
@@ -28,11 +28,14 @@ public class PerfUnit {
         }
 
         LOG.info("Starting PerfUnit agent with config {}", arguments);
-        Configuration configuration = ConfigurationLoader.load(arguments);
-        LOG.info("Loaded config {}", configuration);
-        PerfUnitCollector.create(configuration);
+
+        ApplicationContext applicationContext = ApplicationContext.builder(Map.of("perfunit.config", arguments)).eagerInitSingletons(true)
+                .build().start();
+        ContextHolder.setContext(applicationContext);
+
+        PerfUnitTransformer transformer = applicationContext.getBean(PerfUnitTransformer.class);
         LOG.info("Starting transformations...");
-        instrumentation.addTransformer(new PerfUnitTransformer(configuration));
+        instrumentation.addTransformer(transformer);
     }
 
 }

@@ -4,51 +4,41 @@ import dev.techh.perfunit.configuration.data.Configuration;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
 import dev.techh.perfunit.exception.UnknownCallerException;
-import dev.techh.perfunit.reporter.FileMarkdownReporter;
 import dev.techh.perfunit.reporter.Reporter;
-import dev.techh.perfunit.validator.InvocationCountValidator;
-import dev.techh.perfunit.validator.InvocationTotalTimeValidator;
+import dev.techh.perfunit.utils.ContextHolder;
 import dev.techh.perfunit.validator.RuleValidator;
-import dev.techh.perfunit.validator.SingleInvocationTimeValidator;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+@Singleton
 public class PerfUnitCollector {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private static PerfUnitCollector INSTANCE;
+    @Inject
+    private Configuration configuration;
 
-    private final Configuration configuration;
-    private final PerfUnitStorage storage;
+    @Inject
+    private PerfUnitStorage storage;
 
-    private final RuleValidator[] validators;
-    private final Reporter[] reporters;
+    @Inject
+    private Collection<RuleValidator> validators;
 
-    public static void create(Configuration configuration) {
-        if (INSTANCE == null) INSTANCE = new PerfUnitCollector(configuration);
-    }
-
-    private PerfUnitCollector(Configuration configuration) {
-        this.configuration = configuration;
-        this.storage = new PerfUnitStorage(configuration);
-        this.validators = new RuleValidator[]{new InvocationCountValidator(), new InvocationTotalTimeValidator(),
-                new SingleInvocationTimeValidator()};
-        // TODO Load from yaml
-        // new ConsoleReporter(),
-        this.reporters = new Reporter[] { new FileMarkdownReporter(storage)};
-    }
+    @Inject
+    private Collection<Reporter> reporters;
 
     @SuppressWarnings("unused") // Used in client application
     public static PerfUnitCollector getInstance() {
-        return INSTANCE;
+        return ContextHolder.getContext().getBean(PerfUnitCollector.class);
     }
 
     @SuppressWarnings("unused") // Used in client application
@@ -97,7 +87,7 @@ public class PerfUnitCollector {
                 limitReachedException = new LimitReachedException(ruleFailMessage, getTracingId(rule), rule, invocationsInfo, executionTime, mdc);
 
         storage.addFailure( limitReachedException );
-        Arrays.stream( reporters ).forEach( reporter ->  reporter.onFailure( limitReachedException ));
+        reporters.forEach( reporter ->  reporter.onFailure( limitReachedException ));
 
         if (!rule.isAllowFail()) {
             throw limitReachedException;

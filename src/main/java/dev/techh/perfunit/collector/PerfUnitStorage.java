@@ -3,7 +3,10 @@ package dev.techh.perfunit.collector;
 import dev.techh.perfunit.configuration.data.Configuration;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
+import dev.techh.perfunit.file.FileService;
 import dev.techh.perfunit.utils.StackTraceUtils;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +22,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Singleton
 public class PerfUnitStorage {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
-
-    private final File tempFolder;
 
     // <tracing_id:rule_id> = <invocation_info>
     private Map<String, InvocationsInfo> invocationsPerTracing;
@@ -43,9 +45,11 @@ public class PerfUnitStorage {
     // <dump_id>
     private Set<Long> stackTracesOnDisk;
 
+    @Inject
+    private FileService fileService;
+
     public PerfUnitStorage(Configuration configuration) {
         initStorage(configuration);
-        tempFolder = new File("./perfunit-report/temp"); // TODO Move to config
     }
 
     public InvocationsInfo getInvocation(String tracingId, Rule rule) {
@@ -78,7 +82,7 @@ public class PerfUnitStorage {
 
     public String getStackTrace(long stackTraceId) {
         try {
-            File file = new File(tempFolder, String.valueOf(stackTraceId));
+            File file = new File(fileService.getTempFolder("stack-temp"), String.valueOf(stackTraceId));
             if (file.exists()) return Files.readString(file.toPath());
         } catch (IOException e) {
             LOG.error("Unable to open file", e);
@@ -89,8 +93,8 @@ public class PerfUnitStorage {
 
     private void saveStackTrace(long stackTraceId, String stackTrace) {
         try {
-            if (!tempFolder.exists()) tempFolder.mkdirs();
-            File file = new File(tempFolder, String.valueOf(stackTraceId));
+            File file = new File(fileService.getTempFolder("stack-temp"), String.valueOf(stackTraceId));
+            file.deleteOnExit();
             Files.writeString(file.toPath(), stackTrace);
         } catch (IOException e) {
             LOG.error("Unable to write file", e);

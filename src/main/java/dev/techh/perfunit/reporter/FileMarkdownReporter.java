@@ -7,6 +7,9 @@ import dev.techh.perfunit.collector.InvocationsInfo;
 import dev.techh.perfunit.collector.PerfUnitStorage;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
+import dev.techh.perfunit.file.FileService;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +17,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Singleton
 public class FileMarkdownReporter implements Reporter, Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -30,45 +31,24 @@ public class FileMarkdownReporter implements Reporter, Runnable {
     private final Mustache summaryTemplate;
     private final Mustache ruleHeaderTemplate;
 
-    private final File summaryOutputFolder;
-    private final File rulesOutputFolder;
-
-    private String folder = "./perfunit-report/";
-
+    @Inject
     private PerfUnitStorage storage;
 
-    public FileMarkdownReporter(PerfUnitStorage storage) {
-        this.storage = storage;
+    @Inject
+    private FileService fileService;
 
+    public FileMarkdownReporter() {
         Runtime.getRuntime().addShutdownHook(new Thread(this) );
-
-        summaryOutputFolder = new File(folder);
-        rulesOutputFolder = new File(summaryOutputFolder, "rules");
 
         MustacheFactory mustacheFactory = new DefaultMustacheFactory();
 
         ruleHeaderTemplate = mustacheFactory.compile("template/markdown/rule-header.mustache");
         ruleTemplate = mustacheFactory.compile("template/markdown/rule.mustache");
         summaryTemplate = mustacheFactory.compile("template/markdown/summary.mustache");
-
-        cleanReportFolder();
-    }
-
-    private void cleanReportFolder() {
-        try {
-            if (summaryOutputFolder.exists()) {
-                Files.walk(summaryOutputFolder.toPath()).sorted(Comparator.reverseOrder())
-                        .map(Path::toFile).forEach(File::delete);
-            }
-            LOG.info("Creating report folder [{}]", summaryOutputFolder.getAbsolutePath());
-            rulesOutputFolder.mkdirs();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void saveSummary() {
-        File file = new File(summaryOutputFolder, "index.md");
+        File file = new File(fileService.getRootFolder(), "index.md");
 
         LOG.info("Saving report to [{}]", file.getAbsolutePath());
 
@@ -91,7 +71,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
         for ( Rule rule : violationsPerRule.keySet() ) {
 
             String ruleId = rule.getId();
-            File file = new File(rulesOutputFolder, getFileName(ruleId));
+            File file = new File( fileService.getFolder("rules") , getFileName(ruleId));
 
             save(file, ruleHeaderTemplate, Map.of("rule", rule,
                     "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.size()), true);
