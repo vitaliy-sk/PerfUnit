@@ -1,0 +1,14 @@
+## PerfUnit rule report
+
+* **ID:** {{ rule.id }}
+* **Description:** {{ rule.description }}
+
+* **Limits:**
+    * Per single invocation: {{ rule.limit.timeSingle }} ms
+    * Total time limit: {{ rule.limit.timeTotal }} ms
+    * Count limit: {{ rule.limit.count }}
+
+* **Total invocation count:** {{ invocations.invocationCount }}
+* **Total invocation time:** {{ invocations.totalTime }} ms
+
+* **Total violation count:** {{ totalViolations }}

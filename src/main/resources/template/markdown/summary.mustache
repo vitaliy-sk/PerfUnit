@@ -3,9 +3,24 @@ Generation time: {{ date }}
 
 ## Violated rules
 
-
 | Violation count 	| Rule id 	                            | Rule description 	                                                                        |
 |-----------------	|-------------------------------------- |------------------------------------------------------------------------------------------	|
 {{#violations}}
 | {{ value }}       | {{ key.id }}        	                |    {{ key.description }}                                              	                |
 {{/violations}}
+
+## Invocations count
+
+| Invocation count 	| Rule id 	                            | Rule description 	                                                                        |
+|-----------------	|-------------------------------------- |------------------------------------------------------------------------------------------	|
+{{#invocations}}
+| {{ value.invocationCount }}       | {{ key.id }}        	                |    {{ key.description }}                                              	                |
+{{/invocations}}
+
+## Invocations time
+
+| Invocation time, ms 	| Rule id 	                            | Rule description 	                                                                        |
+|-----------------	|-------------------------------------- |------------------------------------------------------------------------------------------	|
+{{#invocations}}
+| {{ value.totalTime }}       | {{ key.id }}        	                |    {{ key.description }}                                              	                |
+{{/invocations}}

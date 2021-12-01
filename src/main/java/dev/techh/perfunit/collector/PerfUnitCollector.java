@@ -30,8 +30,7 @@ public class PerfUnitCollector {
     private final PerfUnitStorage storage;
 
     private final RuleValidator[] validators;
-    // new ConsoleReporter(),
-    private final Reporter[] reporters = { new FileMarkdownReporter()}; // TODO Load from yaml
+    private final Reporter[] reporters;
 
     public static void create(Configuration configuration) {
         if (INSTANCE == null) INSTANCE = new PerfUnitCollector(configuration);
@@ -42,6 +41,9 @@ public class PerfUnitCollector {
         this.storage = new PerfUnitStorage(configuration);
         this.validators = new RuleValidator[]{new InvocationCountValidator(), new InvocationTotalTimeValidator(),
                 new SingleInvocationTimeValidator()};
+        // TODO Load from yaml
+        // new ConsoleReporter(),
+        this.reporters = new Reporter[] { new FileMarkdownReporter(storage)};
     }
 
     @SuppressWarnings("unused") // Used in client application

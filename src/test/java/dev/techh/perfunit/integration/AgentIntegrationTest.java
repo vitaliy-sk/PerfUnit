@@ -115,7 +115,9 @@ public class AgentIntegrationTest {
 
     @Test
     public void shouldAllowFail() {
-        assertDoesNotThrow(expensiveService::count0InvocationsAllowedNotFail);
+        for (int invocation = 0; invocation < 5; invocation++) {
+            assertDoesNotThrow(expensiveService::count0InvocationsAllowedNotFail);
+        }
     }
 
 }

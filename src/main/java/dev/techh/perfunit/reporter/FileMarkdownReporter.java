@@ -3,9 +3,10 @@ package dev.techh.perfunit.reporter;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import dev.techh.perfunit.collector.InvocationsInfo;
+import dev.techh.perfunit.collector.PerfUnitStorage;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
-import dev.techh.perfunit.utils.StackTraceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,40 +18,39 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FileMarkdownReporter implements Reporter, Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final Mustache reportTemplate;
+
+    private final Mustache ruleTemplate;
     private final Mustache summaryTemplate;
+    private final Mustache ruleHeaderTemplate;
+
     private final File summaryOutputFolder;
     private final File rulesOutputFolder;
 
-    // TODO Move violations to PerfUnitStorage
-
-    // rule id, violation count
-    private Map<Rule, Integer> violations = new HashMap<>();
-
-    // trace id, violated rules ids
-    private Map<Integer, Set<String>> traces = new HashMap<>();
-
-    // TODO Move to config
-    private boolean ignoreTraceDuplicates = true;
     private String folder = "./perfunit-report/";
 
-    public FileMarkdownReporter() {
+    private PerfUnitStorage storage;
+
+    public FileMarkdownReporter(PerfUnitStorage storage) {
+        this.storage = storage;
+
         Runtime.getRuntime().addShutdownHook(new Thread(this) );
 
         summaryOutputFolder = new File(folder);
         rulesOutputFolder = new File(summaryOutputFolder, "rules");
 
         MustacheFactory mustacheFactory = new DefaultMustacheFactory();
-        reportTemplate = mustacheFactory.compile("template/markdown/rule.mustache");
+
+        ruleHeaderTemplate = mustacheFactory.compile("template/markdown/rule-header.mustache");
+        ruleTemplate = mustacheFactory.compile("template/markdown/rule.mustache");
         summaryTemplate = mustacheFactory.compile("template/markdown/summary.mustache");
+
         cleanReportFolder();
     }
 
@@ -72,50 +72,58 @@ public class FileMarkdownReporter implements Reporter, Runnable {
 
         LOG.info("Saving report to [{}]", file.getAbsolutePath());
 
-        Map<String, Object> object = Map.of("date", new Date(), "violations", violations.entrySet()); // TODO Sort by value
+        Map<Rule, Integer> violationsPerRule = storage.getViolationsPerRule();
+        List<Map.Entry<Rule, Integer>> entries =
+                violationsPerRule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
+
+        Map<Rule, InvocationsInfo> invocationsPerRule = storage.getInvocationsPerRule();
+
+        Map<String, Object> object = Map.of("date", new Date(), "violations", entries, "invocations", invocationsPerRule.entrySet());
         save(file, summaryTemplate, object, false);
+    }
+
+    private void saveRules() {
+
+        Map<Rule, Integer> violationsPerRule = storage.getViolationsPerRule();
+        Map<Rule, Map<Long, Integer>> violationsPerStack = storage.getViolationsPerStack();
+        Map<Rule, InvocationsInfo> invocationsPerRule = storage.getInvocationsPerRule();
+
+        for ( Rule rule : violationsPerRule.keySet() ) {
+
+            String ruleId = rule.getId();
+            File file = new File(rulesOutputFolder, getFileName(ruleId));
+
+            save(file, ruleHeaderTemplate, Map.of("rule", rule,
+                    "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.size()), true);
+
+            Map<Long, Integer> violationPerStack = violationsPerStack.get(rule);
+
+            violationPerStack.entrySet().stream().sorted(Map.Entry.comparingByValue())
+                    .forEach( ( entry ) -> {
+                        Long traceId = entry.getKey();
+                        Integer violations = entry.getValue();
+                        String traceString = storage.getStackTrace(traceId);
+
+                        Map<String, Object> object = Map.of("trace", traceString, "traceId", traceId, "count", violations);
+                        save(file, ruleTemplate, object, true);
+
+                    });
+
+        }
+
     }
 
     @Override
     public void run() { // Call from shutdown hook
         saveSummary();
+        saveRules();
     }
 
     @Override
-    public synchronized void onFailure(LimitReachedException limitReachedException) {
-
-        String traceString = StackTraceUtils.stackTraceToString(limitReachedException);
-
-        Rule rule = limitReachedException.getRule();
-        String ruleId = rule.getId();
-
-        int violationsCount = violations.getOrDefault(rule, 0) + 1;
-        violations.put(rule, violationsCount);
-
-        if (!shouldIgnoreTrace(ruleId, traceString)) {
-            File file = new File(rulesOutputFolder, getFileName(ruleId));
-            Map<String, Object> object = Map.of("rule", rule, "trace", traceString, "exception", limitReachedException);
-            save(file, reportTemplate, object, true);
-        }
-
-    }
+    public void onFailure(LimitReachedException limitReachedException) { }
 
     private String getFileName(String ruleId) {
         return String.format("%s.md", ruleId);
-    }
-
-    private boolean shouldIgnoreTrace(String ruleId, String traceString) {
-        int traceCode = traceString.hashCode();
-
-        if (ignoreTraceDuplicates) {
-            if ( traces.containsKey(traceCode) && traces.get(traceCode).contains(ruleId) ) {
-                return true;
-            } else {
-                traces.computeIfAbsent(traceCode, (_k) -> new HashSet<>()).add(ruleId);
-            }
-        }
-
-        return false;
     }
 
     private void save(File file, Mustache template, Map<String, Object> object, boolean append) {
