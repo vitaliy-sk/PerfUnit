@@ -82,7 +82,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
     }
 
     @Override
-    public synchronized void addFailure(LimitReachedException limitReachedException) {
+    public synchronized void onFailure(LimitReachedException limitReachedException) {
 
         String traceString = StackTraceUtils.stackTraceToString(limitReachedException);
 

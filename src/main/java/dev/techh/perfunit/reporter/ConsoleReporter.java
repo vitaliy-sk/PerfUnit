@@ -12,7 +12,7 @@ public class ConsoleReporter implements Reporter {
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Override
-    public void addFailure(LimitReachedException limitReachedException) {
+    public void onFailure(LimitReachedException limitReachedException) {
 
         Rule rule = limitReachedException.getRule();
 

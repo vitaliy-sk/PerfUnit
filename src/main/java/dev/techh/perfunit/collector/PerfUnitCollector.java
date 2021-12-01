@@ -39,7 +39,7 @@ public class PerfUnitCollector {
 
     private PerfUnitCollector(Configuration configuration) {
         this.configuration = configuration;
-        this.storage = new PerfUnitStorage(configuration.getStorageLimit());
+        this.storage = new PerfUnitStorage(configuration);
         this.validators = new RuleValidator[]{new InvocationCountValidator(), new InvocationTotalTimeValidator(),
                 new SingleInvocationTimeValidator()};
     }
@@ -68,10 +68,11 @@ public class PerfUnitCollector {
                     Thread.currentThread().getName(), executionTime);
         }
 
-        InvocationsInfo invocationsInfo = captureInvocation(tracingId, rule, executionTime);
-        LOG.trace("{}", invocationsInfo);
+        storage.addInvocation(tracingId, rule, executionTime);
+        InvocationsInfo tracingInvocation = storage.getInvocation(tracingId, rule);
+        LOG.trace("{}", tracingInvocation);
 
-        validate(mdc, rule, invocationsInfo, executionTime);
+        validate(mdc, rule, tracingInvocation, executionTime);
 
     }
 
@@ -92,18 +93,13 @@ public class PerfUnitCollector {
                                 String ruleFailMessage) {
         LimitReachedException
                 limitReachedException = new LimitReachedException(ruleFailMessage, getTracingId(rule), rule, invocationsInfo, executionTime, mdc);
-        Arrays.stream( reporters ).forEach( reporter ->  reporter.addFailure( limitReachedException ));
+
+        storage.addFailure( limitReachedException );
+        Arrays.stream( reporters ).forEach( reporter ->  reporter.onFailure( limitReachedException ));
 
         if (!rule.isAllowFail()) {
             throw limitReachedException;
         }
-    }
-
-    private InvocationsInfo captureInvocation(String tracingId, Rule rule, long executionTime) {
-        InvocationsInfo invocationsInfo = storage.getInfo(rule, tracingId);
-        invocationsInfo.addInvocation();
-        invocationsInfo.addTime(executionTime);
-        return invocationsInfo;
     }
 
     private String getTracingId(Rule rule) {
