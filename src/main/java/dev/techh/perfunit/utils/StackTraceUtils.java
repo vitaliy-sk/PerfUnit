@@ -11,7 +11,9 @@ public class StackTraceUtils {
         final StringWriter sw = new StringWriter();
         final PrintWriter pw = new PrintWriter(sw, true);
         exception.printStackTrace(pw);
-        return sw.getBuffer().toString();
+        String stackString = sw.getBuffer().toString();
+        stackString = stackString.substring( stackString.indexOf("\tat") );
+        return stackString;
     }
 
 }

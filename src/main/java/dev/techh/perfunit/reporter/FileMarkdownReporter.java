@@ -30,6 +30,8 @@ public class FileMarkdownReporter implements Reporter, Runnable {
     private final File summaryOutputFolder;
     private final File rulesOutputFolder;
 
+    // TODO Move violations to PerfUnitStorage
+
     // rule id, violation count
     private Map<Rule, Integer> violations = new HashMap<>();
 
