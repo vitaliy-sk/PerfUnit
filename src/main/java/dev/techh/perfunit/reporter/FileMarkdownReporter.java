@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +56,15 @@ public class FileMarkdownReporter implements Reporter, Runnable {
 
         Map<Rule, Integer> violationsPerRule = storage.getViolationsPerRule();
         List<Map.Entry<Rule, Integer>> entries =
-                violationsPerRule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
+                violationsPerRule.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toList());
 
         Map<Rule, InvocationsInfo> invocationsPerRule = storage.getInvocationsPerRule();
 
         Map<String, Object> object = Map.of("date", new Date(), "violations", entries, "invocations", invocationsPerRule.entrySet());
         save(file, summaryTemplate, object, false);
+
+        LOG.info("Report saved");
+
     }
 
     private void saveRules() {
@@ -79,7 +83,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
 
             Map<Long, Integer> violationPerStack = violationsPerStack.getOrDefault(rule, Collections.emptyMap());
 
-            violationPerStack.entrySet().stream().sorted(Map.Entry.comparingByValue())
+            violationPerStack.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .forEach( ( entry ) -> {
                         Long traceId = entry.getKey();
                         Integer violations = entry.getValue();

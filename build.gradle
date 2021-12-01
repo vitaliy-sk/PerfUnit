@@ -20,7 +20,6 @@ def jacksonVersion = '2.13.0'
 micronaut {
     version = "3.2.0"
 }
-
 dependencies {
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$jUnitVersion"
@@ -28,14 +27,19 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jUnitVersion"
 
     implementation 'org.javassist:javassist:3.28.0-GA'
-    implementation 'org.slf4j:slf4j-api:1.7.32'
-    implementation 'ch.qos.logback:logback-classic:1.2.7'
+
+    implementation 'org.slf4j:slf4j-api:1.8.0-beta4'
+    implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.14.1'
+
+//    implementation 'ch.qos.logback:logback-classic:1.2.7'
+
     implementation 'com.github.spullara.mustache.java:compiler:0.9.10'
 
     implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
 
 }
+
 
 shadowJar {
 
@@ -46,6 +50,7 @@ shadowJar {
         attributes 'Can-Retransform-Classes': true
         attributes 'Boot-Class-Path' : "perfunit-${agentVersion}.jar"
     }
+
 }
 
 test {
