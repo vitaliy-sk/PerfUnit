@@ -19,7 +19,7 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
       - name: Assemble agent
-        run: ./gradlew assemble
+        run: ./gradlew shadowJar
 
       - name: Run tests
         run: ./gradlew test
