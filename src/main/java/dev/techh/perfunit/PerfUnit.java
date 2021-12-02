@@ -29,7 +29,8 @@ public class PerfUnit {
 
         LOG.info("Starting PerfUnit agent with config {}", arguments);
 
-        Map<String, Object> properties = Map.of("perfunit.config", arguments, "micronaut.config.files", arguments);
+        System.setProperty("micronaut.config.files", arguments);
+        Map<String, Object> properties = Map.of("perfunit.config", arguments);
         ApplicationContext applicationContext = ApplicationContext.builder()
                 .eagerInitSingletons(true)
                 .properties(properties)
