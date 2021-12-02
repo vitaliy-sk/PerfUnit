@@ -41,7 +41,7 @@ public class PerfUnitStorage {
     private Map<Rule, Integer> violationsPerRule;
 
     // <rule_id> = < < dump_id,violations_counter >
-    private Map<Rule, Map<Long, Integer>> violationsPerStack;
+    private Map<Rule, Map<Long, InvocationsInfo>> violationsPerStack;
 
     // <dump_id>
     private Set<Long> stackTracesOnDisk;
@@ -66,7 +66,9 @@ public class PerfUnitStorage {
     }
 
     public void addFailure(LimitReachedException limitReachedException) {
+
         Rule rule = limitReachedException.getRule();
+        limitReachedException.getInvocationsInfo().addViolation();
 
         violationsPerRule.put(rule, violationsPerRule.getOrDefault(rule, 0) + 1);
 
@@ -85,8 +87,8 @@ public class PerfUnitStorage {
             stackTracesOnDisk.add(stackTraceId);
         }
 
-        Map<Long, Integer> stackCounter = violationsPerStack.computeIfAbsent(rule, (_k) -> new HashMap<>());
-        stackCounter.put(stackTraceId, stackCounter.getOrDefault(stackTraceId, 0) + 1);
+        Map<Long, InvocationsInfo> stackCounter = violationsPerStack.computeIfAbsent(rule, (_k) -> new HashMap<>());
+        stackCounter.put(stackTraceId, limitReachedException.getInvocationsInfo());
     }
 
     public String getStackTrace(long stackTraceId) {
@@ -158,7 +160,7 @@ public class PerfUnitStorage {
         return violationsPerRule;
     }
 
-    public Map<Rule, Map<Long, Integer>> getViolationsPerStack() {
+    public Map<Rule, Map<Long, InvocationsInfo>> getViolationsPerStack() {
         return violationsPerStack;
     }
 

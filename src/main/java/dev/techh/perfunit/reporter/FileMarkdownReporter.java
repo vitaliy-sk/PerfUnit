@@ -4,6 +4,7 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import dev.techh.perfunit.collector.InvocationsInfo;
+import dev.techh.perfunit.collector.InvocationsViolationsComparator;
 import dev.techh.perfunit.collector.PerfUnitStorage;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
@@ -70,7 +71,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
     private void saveRules() {
 
         Map<Rule, Integer> violationsPerRule = storage.getViolationsPerRule();
-        Map<Rule, Map<Long, Integer>> violationsPerStack = storage.getViolationsPerStack();
+        Map<Rule, Map<Long, InvocationsInfo>> violationsPerStack = storage.getViolationsPerStack();
         Map<Rule, InvocationsInfo> invocationsPerRule = storage.getInvocationsPerRule();
 
         for ( Rule rule : violationsPerRule.keySet() ) {
@@ -81,15 +82,15 @@ public class FileMarkdownReporter implements Reporter, Runnable {
             save(file, ruleHeaderTemplate, Map.of("rule", rule,
                     "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.size()), true);
 
-            Map<Long, Integer> violationPerStack = violationsPerStack.getOrDefault(rule, Collections.emptyMap());
+            Map<Long, InvocationsInfo> violationPerStack = violationsPerStack.getOrDefault(rule, Collections.emptyMap());
 
-            violationPerStack.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+            violationPerStack.entrySet().stream().sorted(Map.Entry.comparingByValue(InvocationsViolationsComparator.reverseOrder()))
                     .forEach( ( entry ) -> {
                         Long traceId = entry.getKey();
-                        Integer violations = entry.getValue();
+                        InvocationsInfo invocations = entry.getValue();
                         String traceString = storage.getStackTrace(traceId);
 
-                        Map<String, Object> object = Map.of("trace", traceString, "traceId", traceId, "count", violations);
+                        Map<String, Object> object = Map.of("trace", traceString, "traceId", traceId, "invocations", invocations);
                         save(file, ruleTemplate, object, true);
 
                     });
