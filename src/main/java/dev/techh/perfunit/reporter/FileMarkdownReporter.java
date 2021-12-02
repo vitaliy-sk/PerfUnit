@@ -101,12 +101,17 @@ public class FileMarkdownReporter implements Reporter, Runnable {
 
     @Override
     public void run() { // Call from shutdown hook
-        saveSummary();
-        saveRules();
+        save();
     }
 
     @Override
     public void onFailure(LimitReachedException limitReachedException) { }
+
+    @Override
+    public void save() {
+        saveSummary();
+        saveRules();
+    }
 
     private String getFileName(String ruleId) {
         return String.format("%s.md", ruleId);
