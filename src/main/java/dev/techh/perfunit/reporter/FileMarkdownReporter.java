@@ -81,7 +81,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
             fileService.removeIfExists(file);
 
             save(file, ruleHeaderTemplate, Map.of("rule", rule,
-                    "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.size()), true);
+                    "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.getOrDefault(rule, 0)), true);
 
             Map<Long, Integer> violationPerStack = violationsPerStack.getOrDefault(rule, Collections.emptyMap());
 
