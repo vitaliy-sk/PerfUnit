@@ -8,6 +8,7 @@ import dev.techh.perfunit.collector.PerfUnitStorage;
 import dev.techh.perfunit.configuration.data.Rule;
 import dev.techh.perfunit.exception.LimitReachedException;
 import dev.techh.perfunit.file.FileService;
+import io.micronaut.context.annotation.Requires;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Singleton
+@Requires(property = "reporters.console.enable", value = "true")
 public class FileMarkdownReporter implements Reporter, Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
