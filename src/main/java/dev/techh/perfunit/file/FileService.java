@@ -42,6 +42,11 @@ public class FileService {
         return folder;
     }
 
+    public boolean removeIfExists( File file ) {
+        if (file.exists()) return file.delete();
+        return false;
+    }
+
     private void recreateFolder(File folder) {
         try {
             LOG.info("Creating folder [{}]", folder.getAbsolutePath());

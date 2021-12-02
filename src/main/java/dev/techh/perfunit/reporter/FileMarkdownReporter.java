@@ -52,6 +52,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
 
     private void saveSummary() {
         File file = new File(fileService.getRootFolder(), "index.md");
+        fileService.removeIfExists(file);
 
         LOG.info("Saving report to [{}]", file.getAbsolutePath());
 
@@ -78,6 +79,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
 
             String ruleId = rule.getId();
             File file = new File( fileService.getFolder("rules") , getFileName(ruleId));
+            fileService.removeIfExists(file);
 
             save(file, ruleHeaderTemplate, Map.of("rule", rule,
                     "invocations", invocationsPerRule.get(rule), "totalViolations", violationsPerRule.size()), true);
@@ -108,7 +110,7 @@ public class FileMarkdownReporter implements Reporter, Runnable {
     public void onFailure(LimitReachedException limitReachedException) { }
 
     @Override
-    public void save() {
+    public synchronized void save() {
         saveSummary();
         saveRules();
     }

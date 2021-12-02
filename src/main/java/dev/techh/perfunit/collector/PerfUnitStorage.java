@@ -131,7 +131,7 @@ public class PerfUnitStorage {
         violationsPerRule = unlimitedStorage();
         violationsPerStack = unlimitedStorage();
 
-        stackTracesOnDisk = new HashSet<>();
+        stackTracesOnDisk = Collections.synchronizedSet(new HashSet<>());
     }
 
     private <K, V> Map<K, V> createStorageWithLimit(final long maxEntries) {
