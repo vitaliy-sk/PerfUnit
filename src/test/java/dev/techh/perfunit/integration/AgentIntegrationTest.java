@@ -40,29 +40,6 @@ public class AgentIntegrationTest {
     }
 
     @Test
-    public void shouldReachInvocationsLimitsFromDifferentTracingUnits() {
-        MDC.put("traceId", "AgentIntegrationTest-1");
-
-        LimitReachedException exception = assertThrows(LimitReachedException.class, () -> {
-            for (int invocation = 0; invocation < 6; invocation++) {
-                expensiveService.count5InvocationsAllowed();
-            }
-        });
-
-        assertThat(exception.getMessage(), startsWith("Total invocation count [6] > [5]"));
-
-        MDC.put("traceId", "AgentIntegrationTest-2");
-
-        exception = assertThrows(LimitReachedException.class, () -> {
-            for (int invocation = 0; invocation < 6; invocation++) {
-                expensiveService.count5InvocationsAllowed();
-            }
-        });
-
-        assertThat(exception.getMessage(), startsWith("Total invocation count [6] > [5]"));
-    }
-
-    @Test
     public void shouldNotReachInvocationsLimits() {
         assertDoesNotThrow(() -> {
             for (int invocation = 0; invocation < 5; invocation++) {

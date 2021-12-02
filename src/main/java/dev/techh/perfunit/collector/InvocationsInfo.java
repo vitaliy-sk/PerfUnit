@@ -6,7 +6,6 @@ public class InvocationsInfo {
 
     private final AtomicLong invocationCount = new AtomicLong(0);
     private final AtomicLong totalTime = new AtomicLong(0);
-    private final AtomicLong violationsCounter = new AtomicLong(0);
 
     public long getInvocationCount() {
         return invocationCount.get();
@@ -14,14 +13,6 @@ public class InvocationsInfo {
 
     public long getTotalTime() {
         return totalTime.get();
-    }
-
-    public AtomicLong getViolationsCounter() {
-        return violationsCounter;
-    }
-
-    public long addViolation() {
-        return violationsCounter.addAndGet(1L);
     }
 
     public long addInvocation() {
