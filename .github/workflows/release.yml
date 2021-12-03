@@ -1,12 +1,12 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  release:
+    types: [ published ]
 
 jobs:
   build:
+    name: Release
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +21,23 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
-      - name: Set version
-        run: |
-          echo "::set-env name=RELEASE_VERSION::${GITHUB_REF:11}"
-
       - name: Assemble agent
-        run: ./gradlew shadowJar sourcesJar
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew shadowJar -Pversion=${{ github.event.release.name }}
 
-      - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
+          name: ${{ github.event.release.name }}
+          draft: true
           files: |
-            LICENSE.txt
             build/libs/*.jar
+
+#      - name: Assemble and publish
+#        env:
+#          GITHUB_ACTOR: ${{ github.actor }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: ./gradlew publish -Pversion=${{ github.event.release.name }}
 

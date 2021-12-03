@@ -3,12 +3,10 @@ plugins {
     id 'java'
     id 'io.micronaut.library' version '1.3.2'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'maven-publish'
 }
 
-def agentVersion = System.getenv('RELEASE_VERSION') ?: '1.0-SNAPSHOT'
-
 group 'dev.techh'
-version agentVersion
 
 repositories {
     mavenCentral()
@@ -52,7 +50,7 @@ shadowJar {
     manifest {
         attributes 'Premain-Class': 'dev.techh.perfunit.PerfUnit'
         attributes 'Can-Retransform-Classes': true
-        attributes 'Boot-Class-Path' : "perfunit-${agentVersion}.jar"
+        attributes 'Boot-Class-Path' : "perfunit-${project.version}.jar"
     }
 
     exclude '**/javax.servlet.ServletContainerInitializer'
@@ -63,6 +61,24 @@ test {
     testLogging.showStandardStreams = true
     testLogging.exceptionFormat = 'full'
 
-    jvmArgs = ["-javaagent:./build/libs/perfunit-${version}.jar=./src/test/resources/config-sample.yml"]
+    jvmArgs = ["-javaagent:./build/libs/perfunit-${project.version}.jar=./src/test/resources/config-sample.yml"]
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/vitaliy-sk/PerfUnit")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
 }
