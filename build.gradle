@@ -50,6 +50,7 @@ shadowJar {
     }
 
     exclude '**/javax.servlet.ServletContainerInitializer'
+    exclude '**/logback.xml'
 }
 
 test {
