@@ -11,9 +11,12 @@
 
 [comment]: <> ([![Contributors][contributors-shield]][contributors-url])
 [comment]: <> ([![Forks][forks-shield]][forks-url])
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Apache 2.0 License][license-shield]][license-url]
+
+[![Stargazers](https://img.shields.io/github/stars/vitaliy-sk/PerfUnit?style=for-the-badge)](https://github.com/vitaliy-sk/perfunit/stargazers)
+[![Issues](https://img.shields.io/github/issues/vitaliy-sk/PerfUnit?style=for-the-badge)](https://github.com/vitaliy-sk/perfunit/issues)
+[![Apache 2.0 License](https://img.shields.io/github/license/vitaliy-sk/PerfUnit?style=for-the-badge)](https://github.com/vitaliy-sk/PerfUnit/blob/master/LICENSE.md)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/vitaliy-sk/perfunit/Release?label=Release%20CI&style=for-the-badge)
+[![Release](https://img.shields.io/github/v/release/vitaliy-sk/perfunit?style=for-the-badge)](https://github.com/vitaliy-sk/PerfUnit/releases)
 
 [comment]: <> ([![LinkedIn][linkedin-shield]][linkedin-url])
 
@@ -33,8 +36,6 @@
     take control over application bottlenecks
     <br />
     <br />
-    <a href="https://github.com/vitaliy-sk/perfunit">View Demo</a>
-    ·
     <a href="https://github.com/vitaliy-sk/perfunit/issues">Report Bug</a>
     ·
     <a href="https://github.com/vitaliy-sk/perfunit/issues">Request Feature</a>
@@ -132,16 +133,5 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the Apache License Version 2.0 License. See `LICENSE.md` for more information.
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[stars-shield]: https://img.shields.io/github/stars/vitaliy-sk/PerfUnit.svg?style=for-the-badge
-[stars-url]: https://github.com/vitaliy-sk/perfunit/stargazers
-[issues-shield]: https://img.shields.io/github/issues/vitaliy-sk/PerfUnit.svg?style=for-the-badge
-[issues-url]: https://github.com/vitaliy-sk/perfunit/issues
-[license-shield]: https://img.shields.io/github/license/vitaliy-sk/PerfUnit.svg?style=for-the-badge
-[license-url]: https://github.com/vitaliy-sk/perfunit/blob/master/LICENSE.md
 
 ----
