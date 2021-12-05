@@ -13,7 +13,7 @@
 [comment]: <> ([![Forks][forks-shield]][forks-url])
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![Apache 2.0 License][license-shield]][license-url]
 
 [comment]: <> ([![LinkedIn][linkedin-shield]][linkedin-url])
 
@@ -137,11 +137,11 @@ Distributed under the Apache License Version 2.0 License. See `LICENSE.md` for m
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/vitaliy-sk/PerfUnit.svg?style=for-the-badge
 [stars-url]: https://github.com/vitaliy-sk/perfunit/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/vitaliy-sk/PerfUnit.svg?style=for-the-badge
 [issues-url]: https://github.com/vitaliy-sk/perfunit/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/vitaliy-sk/perfunit/blob/master/LICENSE.txt
+[license-shield]: https://img.shields.io/github/license/vitaliy-sk/PerfUnit.svg?style=for-the-badge
+[license-url]: https://github.com/vitaliy-sk/perfunit/blob/master/LICENSE.md
 
 ----
