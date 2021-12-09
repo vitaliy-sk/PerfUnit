@@ -13,10 +13,9 @@ repositories {
 }
 
 def jUnitVersion = '5.8.1'
-def jacksonVersion = '2.13.0'
 
 micronaut {
-    version = "3.2.0"
+    version = "3.2.1"
 }
 dependencies {
 
@@ -31,8 +30,7 @@ dependencies {
 
     implementation 'com.github.spullara.mustache.java:compiler:0.9.10'
 
-    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
+    implementation 'org.yaml:snakeyaml:1.29'
 
 }
 

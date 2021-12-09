@@ -1,13 +1,10 @@
 package dev.techh.perfunit.configuration.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Configuration {
 
     private long storageLimit = 1_000_000_000L;
