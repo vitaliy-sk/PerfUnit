@@ -15,7 +15,6 @@
 [![Stargazers](https://img.shields.io/github/stars/vitaliy-sk/PerfUnit?style=for-the-badge)](https://github.com/vitaliy-sk/perfunit/stargazers)
 [![Issues](https://img.shields.io/github/issues/vitaliy-sk/PerfUnit?style=for-the-badge)](https://github.com/vitaliy-sk/perfunit/issues)
 [![Apache 2.0 License](https://img.shields.io/github/license/vitaliy-sk/PerfUnit?style=for-the-badge)](https://github.com/vitaliy-sk/PerfUnit/blob/master/LICENSE.md)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/vitaliy-sk/perfunit/Release?label=Release%20CI&style=for-the-badge)
 [![Release](https://img.shields.io/github/v/release/vitaliy-sk/perfunit?style=for-the-badge)](https://github.com/vitaliy-sk/PerfUnit/releases)
 
 [comment]: <> ([![LinkedIn][linkedin-shield]][linkedin-url])
